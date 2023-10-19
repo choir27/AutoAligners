@@ -4,7 +4,7 @@ import api from "../api/api"
 import {toast} from "react-toastify"
 import {Client, Account, ID} from "appwrite"
 import {InputTypes, User, Login, SignUp} from "../middleware/Interfaces"
-import {cacheEmail, SetCacheEmail} from "../middleware/Cache"
+import {SetCacheEmail} from "../middleware/Cache"
 
 export function Input(props: InputTypes):React.JSX.Element{
     return(<input 
@@ -19,40 +19,7 @@ export function Input(props: InputTypes):React.JSX.Element{
       )
   }
   
-export async function GetAccount(setUser: (e:User)=>void){
-  try{
-    if(cacheEmail){
-      const user = await api.getAccount();
-      setUser(user);
-    }
 
-  }catch(err){
-    console.error(err);
-  }
-}
-  
-export async function GetUsers(setListOfUsers: (e: User[]) => void, setLoading: (e:boolean)=>void) {
-  try {
-    // You can move the API endpoint URL to a separate constant for better maintainability
-    const apiUrl = "https://car-app-backend-0ejb.onrender.com/getUsers";
-
-    const response = await axios.get(apiUrl);
-
-    // Assuming the response format is { data: { users: [] } }
-    const { data } = response;
-
-    if (data && data.users && data.users.length) {
-      // Only update the list of users if data is available
-      setListOfUsers(data.users);
-      setLoading(true);
-    }
-
-  } catch (err) {
-    console.error(err);
-    // Handle errors gracefully and provide user-friendly feedback
-    // toast.error("Failed to fetch users. Please try again later.");
-  }
-}
   
 export async function handleDelete(userId: string){
     try{
@@ -124,7 +91,7 @@ export async function handleSignUp(props: SignUp):Promise<void>{
 
       const client = new Client()
       .setEndpoint("https://cloud.appwrite.io/v1") // Your API Endpoint
-      .setProject(import.meta.env.VITE_REACT_APP_PROJECT) // Your project ID
+      .setProject(process.env.REACT_APP_PROJECT) // Your project ID
     
   
       const account = new Account(client);

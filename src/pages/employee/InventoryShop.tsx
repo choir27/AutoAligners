@@ -1,18 +1,14 @@
-import {useState, useEffect} from "react"
+import {useState, useContext} from "react"
 import Nav from "../../components/Nav"
 import Footer from "../../components/Footer"
 import {DefaultInventory} from "../../hooks/InventoryHooks"
-import {InventoryItem} from "../../middleware/Interfaces"
-import {GetInventory} from "../../hooks/ApiCalls"
+import {APIContext} from "../../middleware/Context"
 
 export default function InventoryShop(){
 
     const [itemQuantity, setItemQuantity]= useState<number>();
-    const [inventory, setInventory] = useState<InventoryItem[]>([])
-    
-    useEffect(()=>{
-        GetInventory((e:InventoryItem[])=>setInventory(e))
-    },[])
+ 
+    const {inventory} = useContext(APIContext);
 
     return(
         <main id = "inventory">

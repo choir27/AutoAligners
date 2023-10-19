@@ -1,9 +1,11 @@
 import {useEffect, useState} from "react"
 import Nav from "../../components/Nav"
-import {Input, handleLogin, GetUsers} from "../../hooks/LoginHooks"
+import {Input, handleLogin} from "../../hooks/LoginHooks"
 import {ButtonSubmit} from "../../components/Button"
 import Footer from "../../components/Footer"
 import {User} from "../../middleware/Interfaces"
+import {GetUsers} from "../../hooks/ApiCalls"
+
 export default function AdminDemo(){
 
     const name = "Bob The Builder"

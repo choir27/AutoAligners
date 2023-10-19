@@ -5,14 +5,15 @@ import BarGraph from "../../components/Graphs/BarGraph"
 import LineGraph from "../../components/Graphs/LineGraph"
 import HorizontalBarGraph from "../../components/Graphs/HorizontalBarGraph"
 import List from "../../components/Graphs/List"
-import {GetPurchasedProfit, GetPurchases, GetPurchasedQuantities, GetPurchasedDates} from "../../hooks/PurchasesHooks"
+import {GetPurchasedProfit, GetPurchasedQuantities, GetPurchasedDates} from "../../hooks/PurchasesHooks"
 import {Button} from "../../components/Button"
 import {PurchasedItem} from "../../middleware/Interfaces"
+import {GetPurchases} from "../../hooks/ApiCalls"
 
 export default function Purchases(){
 
-    const [purchases,setPurchases]= useState<PurchasedItem[]>([]);
-    const [purchaseList,setPurchaseList]= useState<PurchasedItem[]>([]);
+    const [purchases, setPurchases] = useState<PurchasedItem[]>([]);
+    const [purchaseList, setPurchaseList] = useState<PurchasedItem[]>([]);
     const [display, setDisplay] = useState<string>("bar");
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(false);

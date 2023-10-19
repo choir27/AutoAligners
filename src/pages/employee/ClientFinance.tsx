@@ -1,16 +1,16 @@
-import React, {useState, useEffect} from "react"
+import React, {useState, useEffect, useContext} from "react"
 import Nav from "../../components/Nav"
 import Footer from "../../components/Footer"
 import {checkDate, RenderClientFinance, renderEditFinanceDisplay} from "../../hooks/FinanceHooks"
 import PaginatedButtons from "../../components/Graphs/PaginatedButtons"
 import {SearchBar} from "../../components/Search"
+import {APIContext} from "../../middleware/Context"
 import {ClientFinance} from "../../middleware/Interfaces"
-import {GetClientFinance} from "../../hooks/ApiCalls"
 
 export default function DisplayClientFinance(){
 
+    const {clientFinance, setClientFinance} = useContext(APIContext);
     const [displayFinance, setDisplayFinance] = useState<boolean>(false);
-    const [clientFinance, setClientFinance] = useState<ClientFinance[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [client, setClient] = useState<string>("");
     const [financeTotal, setFinanceTotal] = useState<string>("");
@@ -24,9 +24,6 @@ export default function DisplayClientFinance(){
     const startIndex = (currentPage - 1) * rowsPerPage;
     const endIndex = startIndex + rowsPerPage;  
 
-    useEffect(()=>{
-        GetClientFinance((e:ClientFinance[])=>setClientFinance(e))
-    },[])
 
     useEffect(()=>{
         checkDate(clientFinance)
@@ -41,12 +38,16 @@ export default function DisplayClientFinance(){
             {
             displayFinance ?
             <section>
-                {renderEditFinanceDisplay({display: displayFinance, setDisplay: (e:boolean)=>setDisplayFinance(e), client: client, clientFinance: clientFinance, financeTotal, setFinanceTotal: (e:string)=>setFinanceTotal(e), email, setEmail: (e:string)=>setEmail(e)})}
+                {renderEditFinanceDisplay({display: displayFinance, setDisplay: (e:boolean)=>setDisplayFinance(e), client: client, 
+                    clientFinance: clientFinance, financeTotal, setFinanceTotal: (e:string)=>setFinanceTotal(e), email, setEmail: (e:string)=>setEmail(e)})}
             </section>
             :
             <section>
                 <PaginatedButtons currentPage = {currentPage} cartLength = {clientFinance.length} setCurrentPage = {(e:number)=>setCurrentPage(e)} rowsPerPage={rowsPerPage}/>
-                {SearchBar({hidden: hidden, setHidden: (e:boolean) => setHidden(e), suggestions: suggestions, setSuggestions: (e:React.JSX.Element)=>setSuggestions(e), searchValue: searchValue, setSearchValue: (e:string)=>setSearchValue(e), setData: (e:ClientFinance[])=>setClientFinance(e), database: import.meta.env.VITE_REACT_APP_CART_DATABASE_ID, collection: import.meta.env.VITE_REACT_APP_FINANCE_PAYMENTS_COLLECTION_ID, filterArray: filterArray})}
+                {SearchBar({hidden: hidden, setHidden: (e:boolean) => setHidden(e), suggestions: suggestions, setSuggestions: (e:React.JSX.Element)=>setSuggestions(e), 
+                    searchValue: searchValue, setSearchValue: (e:string)=>setSearchValue(e), setData: (e:ClientFinance[])=>setClientFinance(e), 
+                    database: process.env.REACT_APP_CART_DATABASE_ID, collection: process.env.REACT_APP_FINANCE_PAYMENTS_COLLECTION_ID, 
+                    filterArray: filterArray})}
 
                 {clientFinance.length ? RenderClientFinance({clientFinance: clientFinance, startIndex: startIndex, endIndex: endIndex, displayFinance: displayFinance, setDisplayFinance: (e:boolean)=>setDisplayFinance(e), client: client, setClient: (e:string)=>setClient(e), financeTotal, setFinanceTotal: (e:string)=>setFinanceTotal(e), email, setEmail: (e:string)=> setEmail(e)}) :  <h1 className = "textAlignCenter">No results match your search, try again.</h1>}
             </section>

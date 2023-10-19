@@ -16,7 +16,7 @@ async function NotifyClient(props: Estimate, price: string){
         formData.append("carMake", props.carMake)
         formData.append("price", price);
         
-        await api.deleteDocument(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_ESTIMATES_COLLECTION_ID, props.$id);
+        await api.deleteDocument(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_ESTIMATES_COLLECTION_ID, props.$id);
 
         const data = await axios.post("https://car-app-backend-0ejb.onrender.com/sendEstimateEmail", formData, {})
 

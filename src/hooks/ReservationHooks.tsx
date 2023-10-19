@@ -1,9 +1,8 @@
 import React, {useState} from "react"
 import {toast} from "react-toastify"
-import {carData} from "../api/data.jsx"
 import api from "../api/api.jsx"
 import { Permission, Role } from "appwrite"
-import {ServiceEstimate, Car, CarSelectData, SelectOptions, TextBox, GeneralInput, ChooseInput, Appointment, RenderCalendar, TimeDateAppointments, ChangeTime} from "../middleware/Interfaces"
+import {ServiceEstimate, SelectOptions, TextBox, GeneralInput, ChooseInput, Appointment, RenderCalendar, TimeDateAppointments, ChangeTime} from "../middleware/Interfaces"
 
 
 export function TextBoxInput(props: TextBox):React.JSX.Element{
@@ -123,64 +122,7 @@ export function ChooseTwoInput(props: ChooseInput){
     )
 };
 
-export async function GetCarData(props:CarSelectData){
-        try{
 
-            // sets form options to all car makes
-
-            const uniqueCarOptions: string[] = [];
-
-            carData.forEach((car:Car)=>uniqueCarOptions.indexOf(car.manufacturer) === -1 ? uniqueCarOptions.push(car.manufacturer) : "")
-
-            const carOptions:React.JSX.Element[] = uniqueCarOptions.sort((a:string,b:string)=>a.localeCompare(b)).map((car:string,i:number)=><option key = {i}>{car}</option>);
-            //onMakeSelect is a setState() here, so we make it a separate function here to prevent re-rendering
-
-         
-            const makeSelect = ()=>props.onMakeSelect(carOptions);
-            makeSelect();
-
-            if(props.carMake && props.carMake !== "Select Car Make"){
-
-                //sets form options to all car models available for selected car make value
-                //returning false is there to 1. prevent the warning to appear that filter method expects a returned value 2. to return a value that won't affect the current existing desired functionality
-
-                const uniqueCarOptions:string[] = []
-
-               carData.filter((car:Car)=>{
-                   if(car.manufacturer === props.carMake && uniqueCarOptions.indexOf(car.model)===-1){
-                        uniqueCarOptions.push(car.model)
-                        return car.model
-                   }
-                })
-
-
-                //returns a new array of react jsx element with new car model values that are respective to selected car make value
-                const carOptions:React.JSX.Element[] = uniqueCarOptions.sort((a:string,b:string)=>a.localeCompare(b)).map((car:string,i:number)=>{return <option key = {i}>{car}</option>});
-                const modelSelect = ()=>props.onModelSelect(carOptions)
-                modelSelect();
-            }
-
-            if(props.carMake && props.carModel && (props.carMake !== "Select Car Make") && (props.carModel !== "Select Car Model")){
-                //sets form options to all car years available for car make and car models
-                const response = carData.filter((car:Car)=>{
-                    let year = 0
-                    if(car.manufacturer === props.carMake && car.model === props.carModel){
-                        year = car.year
-                    }
-                    return year
-                })
-
-                //returns a new array of react jsx element with new car year values that are respective to selected car make & model value
-                const carOptions:React.JSX.Element[] = response.map((car:Car,i:number)=><option key = {i}>{car.year}</option>);
-                const yearSelect = ()=>props.onYearSelect(carOptions);
-                yearSelect();
-            }
-
-        }catch(err){
-            console.error(err);
-            toast.error(`${err}`);
-        }
-}
 
 export function ChooseCarService(onChange:(e:string)=>void, defaultValue?: string){
     try{
@@ -473,7 +415,7 @@ export async function handleSubmitData(props: Appointment):Promise<void>{
                 "comment":props.comment
             }
 
-            await api.createDocument(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_COLLECTION_ID, formData, [Permission.read(Role.any())])
+            await api.createDocument(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_COLLECTION_ID, formData, [Permission.read(Role.any())])
 
             window.location.reload();   
 }
@@ -615,7 +557,7 @@ export async function SubmitServiceEstimate(props: ServiceEstimate):Promise<void
     }
 
     
-    const data = await api.createDocument(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_SERVICE_COLLECTION_ID, formData, [Permission.read(Role.any())])
+    const data = await api.createDocument(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_SERVICE_COLLECTION_ID, formData, [Permission.read(Role.any())])
 
     if(data){
         window.location.reload();   

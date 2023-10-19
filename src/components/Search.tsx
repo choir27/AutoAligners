@@ -2,6 +2,7 @@ import {useEffect} from "react"
 import api from "../api/api.jsx"
 import {Button} from "../components/Button"
 import {Search} from "../middleware/Interfaces"
+
 //search
  //enter value into search
  //using appointment database, find appointment with string containing that value

@@ -1,15 +1,14 @@
-import {useState, useEffect} from "react"
+import {useState, useContext} from "react"
 import Nav from "../../components/Nav"
 import Footer from "../../components/Footer"
 import {RenderCart, RenderPaymentForm} from "../../hooks/CartHooks"
 import PaginatedButtons from "../../components/Graphs/PaginatedButtons"
-import {CartItem, CardInfo, InventoryItem} from "../../middleware/Interfaces"
-import {GetInventory, GetCart} from "../../hooks/ApiCalls"
+import {CardInfo} from "../../middleware/Interfaces"
+import {APIContext} from "../../middleware/Context"
 
 export default function Cart(){
 
-    const [cart, setCart] = useState<CartItem[]>([])
-    const [inventory, setInventory] = useState<InventoryItem[]>([])
+    const {cart, inventory} = useContext(APIContext);
     const [cartItemQuantity, setCartItemQuantity] = useState<string>()
     const [cardInfo, setCardInfo] = useState<CardInfo>()
     const [currentPage, setCurrentPage] = useState(1);
@@ -18,14 +17,6 @@ export default function Cart(){
 
     const startIndex = (currentPage - 1) * rowsPerPage;
     const endIndex = startIndex + rowsPerPage;  
-
-    useEffect(()=>{
-        GetCart((e:CartItem[])=>setCart(e))
-    },[])
-
-    useEffect(()=>{
-        GetInventory((e:InventoryItem[])=>setInventory(e))
-    },[])
 
 
     return(

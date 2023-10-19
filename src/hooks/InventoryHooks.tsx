@@ -76,7 +76,7 @@ export function CurrentInventory(props: DisplayCurrentInventory){
 //when the user adds an item from the store to add to the inventory
 export async function HandlePurchaseItem(props: Item){
     try{
-        const data = await api.listDocuments(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_INVENTORY_COLLECTION_ID)
+        const data = await api.listDocuments(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_INVENTORY_COLLECTION_ID)
 
         const checkForDuplicates = await data.documents.filter((inventory:InventoryItem)=>inventory.name === props.inventory.name);
 
@@ -93,7 +93,7 @@ export async function HandlePurchaseItem(props: Item){
             }
 
             //create a new inventory object if no duplicate exists
-            await api.createDocument(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_INVENTORY_COLLECTION_ID, item, [Permission.read(Role.any())])
+            await api.createDocument(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_INVENTORY_COLLECTION_ID, item, [Permission.read(Role.any())])
 
             window.location.reload();
         }else{
@@ -120,7 +120,7 @@ export async function HandlePurchaseItem(props: Item){
             }
 
             //updates the quantity of the item in the inventory
-            await api.updateDocument(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_INVENTORY_COLLECTION_ID, checkForDuplicates[0].$id,item)
+            await api.updateDocument(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_INVENTORY_COLLECTION_ID, checkForDuplicates[0].$id,item)
 
             window.location.reload();
         }
@@ -150,7 +150,7 @@ function renderQuantityOptions(setItemQuantity:(e:number)=>void){
 export function DefaultInventory(props: DefaultInventoryDisplay){
 
     //iterate through static data in api/inventory
-    return items.map((inventoryItem: DisplayInventory, i:number)=>{
+    return items.map((inventoryItem: any, i:number)=>{
 
         //find item in static data currently in inventory database
         const findItem: InventoryItem[] = props.inventory.filter((value:InventoryItem) => value.name === inventoryItem.itemName);

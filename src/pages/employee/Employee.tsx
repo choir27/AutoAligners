@@ -1,38 +1,37 @@
 import Nav from "../../components/Nav"
 import Footer from "../../components/Footer"
-import {useState, useEffect} from "react"
+import {useState, useContext, useEffect} from "react"
 import {ButtonSubmit, Button} from "../../components/Button"
-import {GenerateNewEmployee, handleLogin, GetAccount, GetUsers, DisplayUsers, Input, handleSignUp} from "../../hooks/LoginHooks"
+import {GenerateNewEmployee, handleLogin, DisplayUsers, Input, handleSignUp} from "../../hooks/LoginHooks"
 import {RenderRequestHistory, RenderPTORequests, handlePTO, EmployeeButtons, RenderEmployeeAppointments, RenderEmployeeProfit, handleEmployeeCustomization} from "../../hooks/EmployeeHooks"
 import PaginatedButtons from "../../components/Graphs/PaginatedButtons"
-import ImageUpload from "../../components/Cloudinary/Cloudinary.jsx";
+import ImageUpload from "../../components/Cloudinary/Cloudinary.js";
 import {toggleDisplay} from "../../hooks/FinanceHooks"
-import {PTO, Profile, User, PurchasedItem} from "../../middleware/Interfaces"
 import { cacheEmail } from "../../middleware/Cache"
-import {GetPurchases, GetPTORequests, GetEmployee} from "../../hooks/ApiCalls"
+import {APIContext} from "../../middleware/Context"
+import {User} from "../../middleware/Interfaces"
+import {GetUsers} from "../../hooks/ApiCalls"
 
 export function EmployeeHub(){
 
+    const {user, purchases, employee, PTORequests} = useContext(APIContext);
+
+    const [listOfUsers, setListOfUsers] = useState<User[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
     const [email, setEmail] = useState<string>("");
     const [generatedPassword, setGeneratedPassword] = useState<string>("");
     const [employeeId, setEmployeeId] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [name, setName] = useState<string>("");
-    const [user, setUser] = useState<User>();
-    const [listOfUsers, setListOfUsers] = useState<User[]>([]);
-    const [purchases, setPurchases] = useState<PurchasedItem[]>([]);
     const [showPurchases, setShowPurchases] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [currentPTOPage, setCurrentPTOPage] = useState<number>(1); 
-    const [loading, setLoading] = useState<boolean>(false);
     const [salary, setSalary] = useState<string>("");
     const [PTO, setPTO] = useState<string>("");
     const [startPTODate, setStartPTODate] = useState<string>("");
     const [endPTODate, setEndPTODate] = useState<string>("");
     const [position, setPosition] = useState<string>("");
-    const [employee, setEmployee] = useState<Profile>();
     const [PTODisplay, setPTODisplay] = useState<boolean>(false);
-    const [PTORequests, setPTORequests] = useState<PTO[]>([]);
     const [PTORequestDisplay, setPTORequestDisplay] = useState<boolean>(false);
 
     const rowsPerPage = 3;
@@ -49,32 +48,10 @@ export function EmployeeHub(){
     const lastIndex = firstIndex + rows;
 
     useEffect(()=>{
-      if(cacheEmail){
-        GetAccount((e:User) => setUser(e))
-      }
-    },[])
+      GetUsers((e:User[])=>setListOfUsers(e), (e:boolean)=>setLoading(e));
+  },[listOfUsers])
 
-    useEffect(()=>{
-      if(cacheEmail){
-        GetPTORequests((e:PTO[]) => setPTORequests(e))
-      }
-    },[])
-  
-    useEffect(()=>{
-        GetUsers((e:User[])=>setListOfUsers(e), (e:boolean)=>setLoading(e));
-    },[listOfUsers])
-
-    useEffect(()=>{
-      if(cacheEmail){
-        GetPurchases((e:PurchasedItem[])=>setPurchases(e))
-      }
-    },[listOfUsers])
-
-    useEffect(()=>{
-      if(cacheEmail){
-        GetEmployee((e:Profile)=>setEmployee(e))
-      }
-    },[])
+   
     
     // useEffect(()=>{
     //     AutomaticPTO()
@@ -170,7 +147,7 @@ export function EmployeeHub(){
               <section className="flex justifyBetween alignCenter employee">
                   <section className = "imgContainer">
                       <img src = {employee?.image} className ="profileImg" alt = {employee?.fileName}/>
-                      {/* <ImageUpload user = {user}/> */}
+                      <ImageUpload user = {user}/>
                       </section>
                       <section className="flex flex-col profile">
                       <h2 className = "email">Email: {user.email}</h2>

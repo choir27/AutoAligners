@@ -1,10 +1,10 @@
-    import React, {useState, useEffect} from "react"
+    import React, {useState, useEffect, useContext} from "react"
     import {Button} from "../../components/Button"
     import Nav from "../../components/Nav"
-    import {DisplayTimeDateAppointments, GetCarData, SelectCarMakeInput, SelectCarModelInput, ChooseTwoInput, SelectCarYearInput, ChooseCarService, Input, TextBoxInput, handleCreateAppointment} from "../../hooks/ReservationHooks"
+    import {DisplayTimeDateAppointments, SelectCarMakeInput, SelectCarModelInput, ChooseTwoInput, SelectCarYearInput, ChooseCarService, Input, TextBoxInput, handleCreateAppointment} from "../../hooks/ReservationHooks"
     import Footer from "../../components/Footer"
-    import {Appointment} from "../../middleware/Interfaces"
-    import {GetAppointmentData} from "../../hooks/ApiCalls"
+    import { GetCarData} from "../../hooks/ApiCalls"
+    import {APIContext} from "../../middleware/Context"
 
     export default function Reservation(){
 
@@ -20,6 +20,7 @@
         const [zipCode, setZipCode] = useState<string>("");
         const [contact, setContact] = useState<string>("");
         const [comment, setComment] = useState<string>("");
+        const {appointments} = useContext(APIContext);
 
         const [carMakeOptions, setCarMakeOptions] = useState<React.JSX.Element[]>([]);
         const [carModelOptions, setCarModelOptions] = useState<React.JSX.Element[]>([]);
@@ -27,12 +28,8 @@
         const [stayLeave, setStay_Leave] = useState<string>("");
         const [service, setService] = useState<string>("");
 
-        const [appointments, setAppointments] = useState<Appointment[]>([]);
-
         useEffect(()=>{
             GetCarData({onMakeSelect: setCarMakeOptions, onModelSelect: setCarModelOptions, onYearSelect: setCarYearOptions, carMake: carMake, carModel:carModel});
-
-            GetAppointmentData((e:Appointment[])=>setAppointments(e));
 
         },[carMake, carModel]);
         

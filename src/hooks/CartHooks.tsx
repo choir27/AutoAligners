@@ -77,7 +77,7 @@ export async function handleAddToCart(props: AddToCart){
             }
 
             //create item and add it to the cart database
-            await api.createDocument(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_CART_COLLECTION_ID, cartItem, [Permission.read(Role.any())])
+            await api.createDocument(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_CART_COLLECTION_ID, cartItem, [Permission.read(Role.any())])
     
             window.location.reload();
         }else{
@@ -96,7 +96,7 @@ export async function handleAddToCart(props: AddToCart){
             }
            
             //and update the current data for the respective item
-            await api.updateDocument(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_CART_COLLECTION_ID, item.$id, cartItem)
+            await api.updateDocument(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_CART_COLLECTION_ID, item.$id, cartItem)
     
             window.location.reload();
                 }
@@ -122,7 +122,7 @@ export async function EditCart(item: CartItem){
             "quantity": item.quantity
         }
        
-        await api.updateDocument(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_CART_COLLECTION_ID, item.$id, cartItem);
+        await api.updateDocument(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_CART_COLLECTION_ID, item.$id, cartItem);
 
         window.location.reload();
     }catch(err){
@@ -153,7 +153,7 @@ export function RenderCartQuantity(props: renderCartQuantity){
 //when the user removes an item from the cart
 async function handleDeleteCartItem(cartID: string){
     try{
-        const data = await api.deleteDocument(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_CART_COLLECTION_ID, cartID);
+        const data = await api.deleteDocument(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_CART_COLLECTION_ID, cartID);
 
         if(data){
             window.location.reload();
@@ -190,7 +190,7 @@ async function handleMakeCartPurchase(props: CartPurchase){
                                 quantity: quantity
                             } 
 
-                        const data = await api.updateDocument(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_INVENTORY_COLLECTION_ID, inventoryID, cartItem);
+                        const data = await api.updateDocument(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_INVENTORY_COLLECTION_ID, inventoryID, cartItem);
 
                         console.log(data)
 
@@ -206,19 +206,19 @@ async function handleMakeCartPurchase(props: CartPurchase){
                         //         quantity: quantity + inventoryItem.reOrderLV
                         //     } 
 
-                        //     await api.updateDocument(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_INVENTORY_COLLECTION_ID, inventoryID, updateCartItem)
+                        //     await api.updateDocument(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_INVENTORY_COLLECTION_ID, inventoryID, updateCartItem)
                         // }
                     }
                 }
             })
 
-            const data = await api.createDocument(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_PURCHASES_COLLECTION_ID, cartItems, [Permission.read(Role.any())])
+            const data = await api.createDocument(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_PURCHASES_COLLECTION_ID, cartItems, [Permission.read(Role.any())])
 
             console.log(data)
 
             //remove all currently purchased items from the cart database
             for(let i = 0; i<props.cart.length;i++){
-                await api.deleteDocument(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_CART_COLLECTION_ID, props.cart[i].$id);
+                await api.deleteDocument(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_CART_COLLECTION_ID, props.cart[i].$id);
             }
 
             const payment ={
@@ -231,7 +231,7 @@ async function handleMakeCartPurchase(props: CartPurchase){
 
 
             //add payment info to payment database
-            const response = await api.createDocument(import.meta.env.VITE_REACT_APP_CART_DATABASE_ID, import.meta.env.VITE_REACT_APP_PAYMENTS_COLLECTION_ID, payment, [Permission.read(Role.any())])
+            const response = await api.createDocument(process.env.REACT_APP_CART_DATABASE_ID, process.env.REACT_APP_PAYMENTS_COLLECTION_ID, payment, [Permission.read(Role.any())])
 
             console.log(response)
 

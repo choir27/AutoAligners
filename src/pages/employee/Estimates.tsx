@@ -1,15 +1,17 @@
-import React,{useState, useEffect} from "react"
+import React,{useState, useContext} from "react"
 import Nav from "../../components/Nav"
 import Footer from "../../components/Footer"
 import {RenderEstimates} from "../../hooks/EstimatesHooks"
 import PaginatedButtons from "../../components/Graphs/PaginatedButtons"
 import {SearchBar} from "../../components/Search"
+import {APIContext} from "../../middleware/Context"
 import {Estimate} from "../../middleware/Interfaces"
-import {GetEstimates} from "../../hooks/ApiCalls"
 
 export default function Estimates(){
 
-    const [estimates, setEstimates] = useState<Estimate[]>([]);
+
+    const {estimates, setEstimates} = useContext(APIContext);
+
     const [price, setPrice] = useState<string>("");
     const [estimateFormDisplay, setEstimateFormDisplay] = useState<boolean>()
     const [currentPage, setCurrentPage] = useState(1);
@@ -22,10 +24,6 @@ export default function Estimates(){
     const startIndex = (currentPage - 1) * rowsPerPage;
     const endIndex = startIndex + rowsPerPage;
 
-    useEffect(()=>{
-        GetEstimates((e:Estimate[])=>setEstimates(e));
-    },[])
-
     const filterArray = ['carMake', 'carModel', 'carYear', 'service', 'firstName', 'lastName'];
 
     return(
@@ -33,7 +31,11 @@ export default function Estimates(){
             <Nav pageHeading = {"Estimates"}/>
             <section>
             <PaginatedButtons currentPage = {currentPage} setCurrentPage = {(e:number)=>setCurrentPage(e)} rowsPerPage={rowsPerPage} cartLength={estimates.length}/>
-            {SearchBar({hidden: hidden, setHidden: (e:boolean) => setHidden(e), suggestions: suggestions, setSuggestions: (e:React.JSX.Element)=>setSuggestions(e), searchValue: searchValue, setSearchValue: (e:string)=>setSearchValue(e), setData: (e:Estimate[])=>setEstimates(e), filterArray: filterArray, database: import.meta.env.VITE_REACT_APP_DATABASE_ID, collection: import.meta.env.VITE_REACT_APP_ESTIMATES_COLLECTION_ID})}
+            {SearchBar({hidden: hidden, setHidden: (e:boolean) => setHidden(e), suggestions: suggestions, 
+                setSuggestions: (e:React.JSX.Element)=>setSuggestions(e), searchValue: searchValue, 
+                setSearchValue: (e:string)=>setSearchValue(e), 
+                setData: (e:Estimate[])=>setEstimates(e), filterArray: filterArray, database: process.env.REACT_APP_DATABASE_ID, 
+                collection: process.env.REACT_APP_ESTIMATES_COLLECTION_ID})}
 
             {estimates.length ? RenderEstimates(estimates, price, (e:string)=>setPrice(e),estimateFormDisplay, (e:boolean)=>setEstimateFormDisplay(e), startIndex, endIndex) : <h1 className = "textAlignCenter">No results match your search, try again.</h1>}
 

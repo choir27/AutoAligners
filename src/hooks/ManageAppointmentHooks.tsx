@@ -6,7 +6,7 @@ import axios from "axios"
 import { SetCacheID } from "../middleware/Cache"
 
 export async function handleDeleteAppointment(id:string | undefined){
-    await api.deleteDocument(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_COLLECTION_ID, id);
+    await api.deleteDocument(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_COLLECTION_ID, id);
     window.location.reload();
 }
 
@@ -20,7 +20,7 @@ async function NotifyClient(email:string, service:string, year: string, model: s
             formData.append("carModel", model)
             formData.append("carMake", make)
             
-            await api.deleteDocument(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_COLLECTION_ID, estimateId);
+            await api.deleteDocument(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_COLLECTION_ID, estimateId);
 
             const data = await axios.post("https://car-app-backend-0ejb.onrender.com/sendEmail", formData, {})
 

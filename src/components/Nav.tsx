@@ -1,23 +1,17 @@
-import {useState, useEffect} from "react"
+import {useState, useEffect, useContext} from "react"
 import {ButtonLink,ButtonSubmit} from "../components/Button"
 import {handleLogout} from "../hooks/LoginHooks"
 import {Link} from "react-router-dom"
-import {GetCart} from "../hooks/CartHooks"
 import EmployeeNav from "./EmployeeNav"
 import {CartItem, nav} from "../middleware/Interfaces"
 import {cacheEmail} from "../middleware/Cache"
+import {APIContext} from "../middleware/Context"
 
 export default function Nav(props: nav){
 
 
-    const [cart, setCart] = useState<CartItem[]>();
     const [cartQuantity, setCartQuantity] = useState<number>();
-
-    useEffect(()=>{
-        if(cacheEmail){
-            GetCart((e:CartItem[])=>setCart(e));
-        }
-    },[])
+    const {cart} = useContext(APIContext);
 
     useEffect(()=>{
         if(cacheEmail && cart?.length){

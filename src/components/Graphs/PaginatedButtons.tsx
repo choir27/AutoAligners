@@ -1,4 +1,3 @@
-import React from "react"
 import {buttons} from "../../middleware/Interfaces"
 
 export default function PaginatedButtons(props: buttons){

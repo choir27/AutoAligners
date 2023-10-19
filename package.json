@@ -1,14 +1,34 @@
 {
-  "name": "car-app",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "name": "autoaligners",
+  "version": "6.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "@cloudinary/url-gen": "^1.11.2",
     "@types/node": "^20.8.3",
@@ -16,27 +36,16 @@
     "axios": "^1.5.1",
     "chart.js": "^4.4.0",
     "cloudinary-core": "^2.13.0",
-    "immer": "^10.0.3",
-    "optics-ts": "^2.4.1",
+    "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.16.0",
     "react-router-dom": "^6.16.0",
     "react-scripts": "^5.0.1",
-    "react-toastify": "^9.1.3",
-    "zustand": "^4.4.3"
+    "react-toastify": "^9.1.3"
   },
   "devDependencies": {
-    "@types/react": "^18.2.15",
-    "@types/react-dom": "^18.2.7",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
-    "@vitejs/plugin-react": "^4.0.3",
-    "@vitejs/plugin-vue-jsx": "^3.0.2",
-    "dotenv": "^16.3.1",
-    "eslint": "^8.45.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.3",
-    "vite": "^4.4.5"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@types/react": "^18.2.25"
   }
 }

@@ -9,7 +9,7 @@ export default function Home(){
 
     return(
         <>
-        { cacheEmail ?
+        {cacheEmail ?
         <Employee/>
         :
         <main id = "home">

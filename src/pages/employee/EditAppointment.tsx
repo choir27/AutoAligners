@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from "react"
+import {useState, useEffect, useContext} from "react"
 import Nav from "../../components/Nav"
-import {DisplayTimeDateAppointments, GetCarData, SelectCarMakeInput, SelectCarModelInput, SelectCarYearInput, ChooseCarService, Input, TextBoxInput} from "../../hooks/ReservationHooks"
+import {DisplayTimeDateAppointments, SelectCarMakeInput, SelectCarModelInput, SelectCarYearInput, ChooseCarService, Input, TextBoxInput} from "../../hooks/ReservationHooks"
 import { EditChooseTwoInput, handleEditAppointment, checkDate} from "../../hooks/EditAppointmentHooks"
 import {Button} from "../../components/Button"
 import Footer from "../../components/Footer"
-import {Appointment} from "../../middleware/Interfaces"
 import { cacheEditAppointmentData } from "../../middleware/Cache"
-import {GetEditAppointmentData, GetAppointmentData} from "../../hooks/ApiCalls"
+import {GetEditAppointmentData, GetCarData} from "../../hooks/ApiCalls"
+import {APIContext} from "../../middleware/Context"
 
 export default function EditAppointment(){
 
@@ -23,19 +23,17 @@ export default function EditAppointment(){
     const [contact, setContact] = useState<string>("");
     const [comment, setComment] = useState<string>("");
 
+   
+    const [stayLeave, setStay_Leave] = useState<string>("");
+    const [service, setService] = useState<string>("");
+    const {appointments} = useContext(APIContext);
+    const [warning, setWarning] = useState<string>("");
     const [carMakeOptions, setCarMakeOptions] = useState<React.JSX.Element[]>([]);
     const [carModelOptions, setCarModelOptions] = useState<React.JSX.Element[]>([]);
     const [carYearOptions, setCarYearOptions] = useState<React.JSX.Element[]>([]);    
-    const [stayLeave, setStay_Leave] = useState<string>("");
-    const [service, setService] = useState<string>("");
-
-    const [appointments, setAppointments] = useState<Appointment[]>([]);
-    const [warning, setWarning] = useState<string>("");
 
     useEffect(()=>{
         GetCarData({onMakeSelect: setCarMakeOptions, onModelSelect: setCarModelOptions, onYearSelect: setCarYearOptions, carMake: carMake, carModel:carModel});
-
-        GetAppointmentData((e:Appointment[])=>setAppointments(e))
 
         GetEditAppointmentData();
 

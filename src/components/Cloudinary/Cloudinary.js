@@ -1,7 +1,6 @@
 import {useRef, useEffect} from "react"
 import api from "../../api/api"
 import { Permission, Role } from "appwrite"
-import {cacheEmail} from "../../middleware/Cache"
 
 const ImageUpload = ({user}) => {
 
@@ -19,14 +18,14 @@ const ImageUpload = ({user}) => {
         email: user.email
       }
 
-      const employeeList = await api.listDocuments(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_PROFILE_COLLECTION_ID)
+      const employeeList = await api.listDocuments(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_PROFILE_COLLECTION_ID)
 
-      const findEmployee = employeeList.documents.filter((employee)=>employee.email === cacheEmail)
+      const findEmployee = employeeList.documents.filter((employee)=>employee.email === localStorage.getItem("email"))
 
       if(findEmployee.length){
-        await api.updateDocument(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_PROFILE_COLLECTION_ID, findEmployee[0].$id, data)
+        await api.updateDocument(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_PROFILE_COLLECTION_ID, findEmployee[0].$id, data)
       }else{
-        await api.createDocument(import.meta.env.VITE_REACT_APP_DATABASE_ID, import.meta.env.VITE_REACT_APP_PROFILE_COLLECTION_ID, data, [Permission.read(Role.any())])
+        await api.createDocument(process.env.REACT_APP_DATABASE_ID, process.env.REACT_APP_PROFILE_COLLECTION_ID, data, [Permission.read(Role.any())])
       }
 
     }catch(err){

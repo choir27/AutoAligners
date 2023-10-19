@@ -1,17 +1,13 @@
-import React, {useState, useEffect} from "react"
-import {DisplayByMonth, DisplayByWeek, DisplayByYear, GetPurchases} from "../../hooks/PurchasesHooks"
+import {useState, useContext} from "react"
+import {DisplayByMonth, DisplayByWeek, DisplayByYear} from "../../hooks/PurchasesHooks"
 import {Button} from "../../components/Button"
-import {ListLabels, PurchasedItem} from "../../middleware/Interfaces"
-
+import {ListLabels} from "../../middleware/Interfaces"
+import {APIContext} from "../../middleware/Context"
 
 export default function List(props: ListLabels){
 
-    const [purchases,setPurchases]= useState<PurchasedItem[]>([]);
     const [display, setDisplay] = useState<string>("week");
-
-    useEffect(()=>{
-        GetPurchases((e:PurchasedItem[])=>setPurchases(e));
-    },[])
+    const {purchases} = useContext(APIContext);
 
     return(
         <section>

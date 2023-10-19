@@ -1,10 +1,9 @@
 import Footer from "../../components/Footer"
 import Nav from "../../components/Nav"
-import React, {useState, useEffect} from "react"
+import React, {useState, useContext} from "react"
 import {Button} from "../../components/Button"
-import {updateAccountEmail, GetAccount, handleDeleteAccount, updateAccountName, updateAccountPassword, Input} from "../../hooks/LoginHooks"
-import {User} from "../../middleware/Interfaces"
-import {cacheEmail} from "../../middleware/Cache"
+import {updateAccountEmail, handleDeleteAccount, updateAccountName, updateAccountPassword, Input} from "../../hooks/LoginHooks"
+import {APIContext} from "../../middleware/Context"
 
 export default function EmployeeSettings():React.JSX.Element{
 
@@ -14,14 +13,9 @@ export default function EmployeeSettings():React.JSX.Element{
   const [oldPassword, setOldPassword] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [name, setName] = useState<string>("");
-  const [user, setUser] = useState<User>();
+  
+  const {user} = useContext(APIContext);
 
-
-  useEffect(()=>{
-    if(cacheEmail){
-      GetAccount((e:User) => setUser(e))
-    }
-  },[])
 
     return(
         <main id = "employeeSettings">

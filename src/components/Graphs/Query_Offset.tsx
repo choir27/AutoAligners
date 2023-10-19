@@ -1,5 +1,5 @@
 import React from "react"
-import { GetPurchases } from "../../hooks/PurchasesHooks";
+import { GetPurchases } from "../../hooks/ApiCalls";
 
 export default function Query_Offset(itemLength: number, limit: number, setLimit: (e:number)=>void){
     const buttons = [];
